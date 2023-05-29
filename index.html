@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Number Guessing Game</title>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Guessing Game</h1>
+  <p>Enter a number between 1 and 100:</p>
+  <input type="number" id="userNumber">
+  <button onclick="startGame()">Start</button>
+  <p id="resultMessage"></p>
+
+  <script>
+    var targetNumber;
+    var attempts = 5;
+
+    function startGame() {
+      // Reset game
+      clearResult();
+      attempts = 5;
+      var userNumber = parseInt(document.getElementById('userNumber').value);
+
+      if (isNaN(userNumber) || userNumber < 1 || userNumber > 100) {
+        showError('Invalid number. Please enter a number between 1 and 100.');
+      } else {
+        targetNumber = generateRandomNumber(1, 100);
+        playGame(userNumber);
+      }
+    }
+
+    function playGame(userNumber) {
+      if (userNumber === targetNumber) {
+        showResult('Congratulations! You won!');
+      } else if (attempts === 0) {
+        showResult('Sorry, you lost. The correct number was ' + targetNumber);
+      } else {
+        attempts--;
+        var message = 'Incorrect guess. ';
+        if (userNumber > targetNumber) {
+          message += 'Try a lower number. ' + attempts + ' attempts remaining.';
+        } else {
+          message += 'Try a higher number. ' + attempts + ' attempts remaining.';
+        }
+        showError(message);
+      }
+    }
+
+    function generateRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function showResult(message) {
+      var resultElement = document.getElementById('resultMessage');
+      resultElement.textContent = message;
+    }
+
+    function showError(errorMessage) {
+      var errorElement = document.getElementById('resultMessage');
+      errorElement.textContent = errorMessage;
+      errorElement.classList.add('error');
+    }
+
+    function clearResult() {
+      var resultElement = document.getElementById('resultMessage');
+      resultElement.textContent = '';
+      resultElement.classList.remove('error');
+    }
+  </script>
+</body>
+</html>
